@@ -11,7 +11,6 @@ const signInSection = document.getElementById('signInSection');
 const userNameSpan = document.getElementById('userName');
 const signInBtn = document.getElementById('signInBtn');
 const userList = document.getElementById('userList');  
-
 let latestDescriptor = null;
 let savedFaces = loadSavedFaces();
 let currentRecognizedName = null;
@@ -122,9 +121,11 @@ video.addEventListener('play', () => {
 
 loadModels();
 
+
 if (window.location.pathname.endsWith('welcome.html')) {
   displayUsers();
 
+ 
   function displayUsers() {
     userList.innerHTML = ''; 
 
@@ -146,7 +147,6 @@ if (window.location.pathname.endsWith('welcome.html')) {
     if (confirmDelete) {
       delete savedFaces[name];
       localStorage.setItem("faces", JSON.stringify(savedFaces));
-      displayUsers();  
     }
   }
 }
