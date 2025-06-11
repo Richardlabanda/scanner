@@ -10,13 +10,13 @@ const registerBtn = document.getElementById('registerBtn');
 const signInSection = document.getElementById('signInSection');
 const userNameSpan = document.getElementById('userName');
 const signInBtn = document.getElementById('signInBtn');
+const userList = document.getElementById('userList');  
 
 let latestDescriptor = null;
 let savedFaces = loadSavedFaces();
 let currentRecognizedName = null;
 
 registerBtn.onclick = saveCurrentFace;
-
 signInBtn.onclick = () => {
   window.location.href = 'welcome.html';
 };
@@ -59,8 +59,8 @@ function showRegisterHideSignIn() {
 async function loadModels() {
   await Promise.all([
     faceapi.nets.tinyFaceDetector.loadFromUri('./models/tiny_face_detector'),
-  faceapi.nets.faceLandmark68Net.loadFromUri('./models/face_landmark_68'),
-  faceapi.nets.faceRecognitionNet.loadFromUri('./models/face_recognition'),
+    faceapi.nets.faceLandmark68Net.loadFromUri('./models/face_landmark_68'),
+    faceapi.nets.faceRecognitionNet.loadFromUri('./models/face_recognition'),
   ]);
   result.textContent = 'Models loaded. Starting camera...';
   startVideo();
@@ -88,7 +88,6 @@ video.addEventListener('play', () => {
     ).withFaceLandmarks().withFaceDescriptors();
 
     const resized = faceapi.resizeResults(detections, displaySize);
-
     ctx.clearRect(0, 0, overlay.width, overlay.height);
     faceapi.draw.drawDetections(overlay, resized);
     faceapi.draw.drawFaceLandmarks(overlay, resized);
@@ -122,3 +121,32 @@ video.addEventListener('play', () => {
 });
 
 loadModels();
+
+if (window.location.pathname.endsWith('welcome.html')) {
+  displayUsers();
+
+  function displayUsers() {
+    userList.innerHTML = ''; 
+
+    for (let name in savedFaces) {
+      const li = document.createElement('li');
+      li.textContent = name;
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = 'Delete';
+      deleteBtn.onclick = () => deleteUser(name);
+
+      li.appendChild(deleteBtn);
+      userList.appendChild(li);
+    }
+  }
+
+  function deleteUser(name) {
+    const confirmDelete = confirm(`Are you sure you want to delete the saved face for "${name}"?`);
+    if (confirmDelete) {
+      delete savedFaces[name];
+      localStorage.setItem("faces", JSON.stringify(savedFaces));
+      displayUsers();  
+    }
+  }
+}
