@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Face Recognition Scanner</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#2d89ef" />
+  <style>
+    #registerSection, #signInSection {
+      margin-top: 20px;
+    }
+    #registerSection, #signInSection {
+      display: none;
+    }
+    button {
+      margin-left: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Face Recognition Scanner</h1>
+
+  <video id="video" autoplay muted playsinline width="480" height="360"></video>
+  <canvas id="overlay" width="480" height="360"></canvas>
+
+  <p id="result">Loading models...</p>
+
+  <div id="registerSection">
+    <input type="text" id="registerName" placeholder="Enter your name to register" />
+    <button id="registerBtn">Register Face</button>
+  </div>
+
+  <div id="signInSection">
+    <p>Welcome, <span id="userName"></span>!</p>
+    <button id="signInBtn">Sign In</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>
